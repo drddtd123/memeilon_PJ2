@@ -9,8 +9,6 @@ public class BackGround_Manager
     public List<Dictionary<string, object>> Type_Attribute_value_ATK;//속성 배율[공격력]
     public List<Dictionary<string, object>> Type_Attribute_value_DF;//속성 배율[방어력]
 
-
-
     public static BackGround_Manager Start_manager()
     {
         if (Back_m == null)
@@ -33,6 +31,12 @@ public class BackGround_Manager
         Type_Attribute_value_ATK = File_Readerr.Read("Type_Attribute_value_ATK");
         Type_Attribute_value_DF = File_Readerr.Read("Type_Attribute_value_DF");
     }
+
+
+
+
+
+
 
     public static float Back_value_Atk(string Statnames, int data)
     {

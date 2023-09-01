@@ -10,6 +10,7 @@ public class File_Readerr//스킬 배율이나 그런거 다 들고 다닐넘
     static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
     static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
     static char[] TRIM_CHARS = { '\"' };
+    public static List<Dictionary<string, object>> Ch_Lists = new List<Dictionary<string, object>>();
 
     public static List<Dictionary<string, object>> Read(string file)
     {
@@ -48,6 +49,16 @@ public class File_Readerr//스킬 배율이나 그런거 다 들고 다닐넘
             list.Add(entry);
         }
         return list;
+    }
+
+
+    public static void Back_List_Ch(){
+
+        Ch_Lists = Read("CH_List_STAT");
+
+
+
+
     }
 
 

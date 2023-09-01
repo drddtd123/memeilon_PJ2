@@ -9,8 +9,9 @@ public class FIght_ch : Fight
 
     }
 
-    public override IEnumerator Fight_Tamplate(Ch Execute_ch, Skill_Type sk, Ch receive_ch)
+    public override IEnumerator Coroutine_Fight_Tamplate(Ch Execute_ch, Skill_Type sk, Ch receive_ch)
     {
+        
         //이펙트 발동 (캐릭터 애니메이션)
 
         //행동 선택 -> UI OFF > 스킬 이펙트 ON >

@@ -18,7 +18,7 @@ public abstract class Fight : MonoBehaviour
     }
 
 
-    public virtual IEnumerator Fight_Tamplate(Ch Execute_ch, Skill_Type sk, Ch receive_ch)
+    public virtual IEnumerator Coroutine_Fight_Tamplate(Ch Execute_ch, Skill_Type sk, Ch receive_ch) //<- 교전 방식 오버라이드 해서 사용해줘야함
     {
         yield return null;
     }
@@ -58,9 +58,9 @@ public abstract class Fight : MonoBehaviour
         Debug.Log("대미지" + dmg);
         Debug.Log("방어 배율" + DEF);
         int Crit = Random.Range(0, 100);
-        Debug.Log("크리티컬 확률" + Execute_ch.Critical_value.Stat_out());
+        Debug.Log("크리티컬 확률" + Execute_ch.Ultara_instinct.Stat_out());
         Debug.Log("크리티컬 확률2"+Crit);
-        if(Execute_ch.Critical_value.Stat_out()>= Crit)
+        if(Execute_ch.Ultara_instinct.Stat_out()>= Crit)
         {
             Calculate_end_Damage= (dmg* DEF)*1.2f;//크리티컬
         }
@@ -71,13 +71,13 @@ public abstract class Fight : MonoBehaviour
         Debug.Log("대미지[크리티컬 적용]" + Calculate_end_Damage);
         //receive_ch.End_State_Flag = 2;
         //상대의 상태에 따라 대미지가 다름
-        if (receive_ch.End_State_Flag == 0)//기본 상태
+        if (receive_ch.End_State_Flag.Get_Stat_names() == 0)//기본 상태
         {
             receive_ch.HP.Stat_Down((int)Math.Ceiling(Calculate_end_Damage), true);
         }
-        else  if (receive_ch.End_State_Flag == 1)//회피 상태
+        else  if (receive_ch.End_State_Flag.Get_Stat_names() == 1)//회피 상태
         {
-            if (Dodge_Check(receive_ch.Ultara_instinct.Stat_out(), Execute_ch.Ultara_instinct.Stat_out()))//True면 회피 성공
+            if (Dodge_Check(receive_ch.Speed.Stat_out(), Execute_ch.Ultara_instinct.Stat_out()))//True면 회피 성공
             {
                 Debug.Log("회피!!");
                 receive_ch.Dodge_Flag_Success = true;//회피 성공 플래그
@@ -89,7 +89,7 @@ public abstract class Fight : MonoBehaviour
                 receive_ch.HP.Stat_Down((int)Math.Ceiling(Calculate_end_Damage * 1.2f), true);
             }
         }
-        else if (receive_ch.End_State_Flag == 2)//방어 상태
+        else if (receive_ch.End_State_Flag.Get_Stat_names() == 2)//방어 상태
         {
             Debug.Log("방어!!" + Calculate_end_Damage * 0.7f);
             receive_ch.HP.Stat_Down((int)Math.Ceiling(Calculate_end_Damage * 0.7f), true);
@@ -110,12 +110,12 @@ public abstract class Fight : MonoBehaviour
     public virtual void Fight_EndHook(Ch receive_ch, Ch Execute_ch)//후크
     {
         receive_ch.Dodge_Flag_Success = false;
-        receive_ch.End_State_Flag = 0;
+        receive_ch.End_State_Flag.Set_Stat(0);
     }
-    public virtual bool Dodge_Check(int receive_ch_Reflect_nerve, int Execute_ch_receive_ch_Reflect_nerve)
-    //receive_ch_Reflect_nerve 는 대미지를 받는 얘의 회피 확률 
-    {//Execute_ch_receive_ch_Reflect_nerve는 공격하는 얘의 명중률임
-        float Dodge = 30f +(receive_ch_Reflect_nerve - Execute_ch_receive_ch_Reflect_nerve);
+    public virtual bool Dodge_Check(int receive_ch_Ultara_instinct, int Execute_ch_receive_ch_Ultara_instinct)
+    //receive_ch_Ultara_instinct 는 대미지를 받는 얘의 회피 확률 
+    {//Execute_ch_receive_ch_Ultara_instinct는 공격하는 얘의 명중률임
+        float Dodge = 30f/*기본 확률*/ +(receive_ch_Ultara_instinct - Execute_ch_receive_ch_Ultara_instinct);
         if(Dodge >=70f)//회피 확률 고정
         {
             Dodge = 70f;
@@ -170,12 +170,12 @@ public abstract class Fight : MonoBehaviour
         }
         else//EX 타입
         {
-            Attribute_Value = BackGround_Manager.Back_value_Atk(skill.skill_Attribute, Execute_ch.EX_Types.Stat_out());//해당 하는 타입의 계수 가져옴
+            Attribute_Value = BackGround_Manager.Back_value_Atk(skill.skill_Attribute, Execute_ch.abnormal_status.Stat_out());//해당 하는 타입의 계수 가져옴
         }
         Debug.Log("1-"+Type_Value);
         Debug.Log("2-"+Attribute_Value);
        
-        double sums = (Execute_ch.ATK.Stat_out() * (Type_Value + Attribute_Value)) * (skill.Dmg_Persent*0.01f);//[계산식(공격력 * (타입 배율+타입 배율) * 스킬 배율 = 대미지]
+        double sums = (Execute_ch.Power.Stat_out() * (Type_Value + Attribute_Value)) * (skill.Dmg_Persent*0.01f);//[계산식(공격력 * (타입 배율+타입 배율) * 스킬 배율 = 대미지]
         return (int)Math.Ceiling(sums);//올림 처리
     }
 
@@ -203,7 +203,7 @@ public abstract class Fight : MonoBehaviour
         }
         else//EX 타입
         {
-            Attribute_Value = BackGround_Manager.Back_value_DF(skill.skill_Attribute, receive_ch.EX_Types.Stat_out());//해당 하는 타입의 계수 가져옴
+            Attribute_Value = BackGround_Manager.Back_value_DF(skill.skill_Attribute, receive_ch.abnormal_status.Stat_out());//해당 하는 타입의 계수 가져옴
         }
 
         float sums = (100 / ((100 + receive_ch.Defence.Stat_out()) * (Attribute_Value + Type_Value)));
