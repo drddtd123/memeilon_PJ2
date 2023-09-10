@@ -5,7 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Field_countroll : MonoBehaviour
 {
+    //게임 필드 씬 컨트롤러 [포켓몬 아웃필드 느낌]
     GameM_chs game_m;
+    [SerializeField] private int Count = 0;  
+    
+
 
 
     // Start is called before the first frame update
@@ -14,7 +18,7 @@ public class Field_countroll : MonoBehaviour
         game_m = GameM_chs.SetSpawn();
         File_Readerr.Back_List_Ch();
         Party_setting();
-
+      
     }
 
     // Update is called once per frame
@@ -37,13 +41,13 @@ public class Field_countroll : MonoBehaviour
         {
             game_m = GameM_chs.SetSpawn();
         }
-        game_m.Player[0] = PartySet("P");
-        game_m.Enemy[0] = PartySet("E");
+        game_m.Player_Party[0] = PartySet("P");
+        game_m.Enemy_Party[0] = PartySet("E");
         //스킬 넣어주기
-        game_m.Player[0].Skill_names = game_m.SKill_IN_CH(game_m.Player[0]);
-        game_m.Enemy[0].Skill_names = game_m.SKill_IN_CH(game_m.Enemy[0]);
-        Debug.Log("스킬 카운트" + game_m.Player[0].Skill_names[0].Skill_names);
-        Debug.Log("스킬 카운트" + game_m.Enemy[0].Skill_names.Count);
+        game_m.Player_Party[0].Skill_names = game_m.SKill_IN_CH(game_m.Player_Party[0]);
+        game_m.Enemy_Party[0].Skill_names = game_m.SKill_IN_CH(game_m.Enemy_Party[0]);
+        Debug.Log("스킬 카운트" + game_m.Player_Party[0].Skill_names[0].Skill_names);
+        Debug.Log("스킬 카운트" + game_m.Enemy_Party[0].Skill_names.Count);
     }
 
 
@@ -75,6 +79,8 @@ public class Field_countroll : MonoBehaviour
                  int.Parse(File_Readerr.Ch_Lists[1]["Mana_regeneration_P_Maxed"].ToString()),
                  int.Parse(File_Readerr.Ch_Lists[1]["mana_Maxed"].ToString()),1,0,0);
         }
+
+  
         return a;
     }
 

@@ -203,29 +203,39 @@ public static class Maxed_stats// 최대 스탯 저장 해놓은거
 
 
 
-public class Turn: Turn_begin// 턴 슈퍼 클래스
+public class Turn// 턴 슈퍼 클래스
 {
-    static Turn Turn_singleTon;//싱글톤
+    //static Turn Turn_singleTon;//싱글톤
 
-    int Turn_count = 0;//
+     private int Turn_count = 0;//
    
-    public static Turn Trun_on()
+    //public static Turn Trun_on()
+    //{
+
+    //    if (Turn_singleTon == null)
+    //    {
+    //        lock (typeof(Turn))// 하나 의 스레드만 접근 가능
+    //        {
+    //            Debug.Log("싱글톤 허락됐음");
+    //            if (Turn_singleTon == null)
+    //            {
+    //                Turn_singleTon = new Turn();
+    //            }
+    //        }
+    //    }
+
+
+    //    return Turn_singleTon;
+    //}
+
+    public Turn(int Turn_count)
     {
-
-        if (Turn_singleTon == null)
-        {
-            lock (typeof(Turn))// 하나 의 스레드만 접근 가능
-            {
-                Debug.Log("싱글톤 허락됐음");
-                if (Turn_singleTon == null)
-                {
-                    Turn_singleTon = new Turn();
-                }
-            }
-        }
-
-
-        return Turn_singleTon;
+        this.Turn_count = Turn_count;
+    }
+    
+    public int back_Turn()
+    {
+        return this.Turn_count;
     }
 
 
@@ -241,16 +251,6 @@ public class Turn: Turn_begin// 턴 슈퍼 클래스
     public void Turn_Reset()
     {
         Turn_count = 0;
-    }
-
-    public void Start_Turn()
-    {// 턴 시작시 필드 효과가 있는 경우
-      
-    }
-
-    public void End_Turn()
-    {// 턴 종료시 필드 효과가 있는 경우
-
     }
 }
 
@@ -276,13 +276,18 @@ public  class Skill_Type
    public string Skill_Type_name ="Skill_Type";//스킬의 타입 근접 Melee,원거리 Ranger
    public string skill_Attribute = "Skill_A";//스킬의 속성 물리 Physics, 마법 Magic, 특수 EX_Types
    public int cost_gain = 0;// 스킬 사용시 코스트를 어느정도 소모하는가?
-     //스킬들의 명중률은 100%다 
-    public Skill_Type(float dmg_Persent, string skill_Type_name, string skill_Attribute,string Skill_names)
+   //나중에 스킬 이펙트 추가시 해당 스크립트에 이펙트 관련추가 필요
+   float SKill_Time = 0f;//스킬 시전 시간
+
+
+     //스킬들의 명중률은 100%다 (디폴트 값)
+    public Skill_Type(float dmg_Persent, string skill_Type_name, string skill_Attribute, string Skill_names, float sKill_Time)
     {
         Dmg_Persent = dmg_Persent;
         Skill_Type_name = skill_Type_name;
         this.skill_Attribute = skill_Attribute;
         this.Skill_names = Skill_names;
+        SKill_Time = sKill_Time;
     }
 
 
@@ -384,7 +389,65 @@ public interface Buff
 }
 
 
+public class field_ch// 필드 캐릭터용 구조체
+{
 
+    public GameObject CH_obj;
+    public string Ch_names;
+
+
+    public field_ch(GameObject cH_obj, string ch_names)
+    {
+        CH_obj = cH_obj;
+        Ch_names = ch_names;
+    }
+}
+
+
+public class ch_Flag// 필드 캐릭터용 구조체
+{
+    public int Flag_NUM;
+    public int Speed;
+    public ch_Flag(int flag_NUM, int speed)
+    {
+        Flag_NUM = flag_NUM;
+        Speed = speed;
+    }
+}
+
+
+
+public class ch_Proceed_Check//10개
+{
+    private string Ch_Selected;//NULL이면 주체가 없는거 
+    private string Targer_Ch;// NULL이면 타겟이 없는거 
+
+
+    public ch_Proceed_Check(string Ch_Selected, string Targer_Ch)
+    {
+        this.Ch_Selected = Ch_Selected;
+        this.Targer_Ch = Targer_Ch;
+    }
+
+    public string Check_Selcted_Ch()
+    {
+        return Ch_Selected;
+    }
+
+    public string Check_Target_Ch()
+    {
+        return Targer_Ch;
+    }
+
+    public void IN_Selected_Ch(string Invoke_CH)
+    {
+        Ch_Selected = Invoke_CH;
+    }
+    public void IN_Target_Ch(string Targer_Ch)
+    {
+        this.Targer_Ch = Targer_Ch;
+    }
+}
 
 
 

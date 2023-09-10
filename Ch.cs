@@ -11,7 +11,8 @@ public class Ch
     //교전 시작-> (메모리 할당) -> 교전 끝 -> GC(로딩창과 함께)
     //로딩 과 게임 씬 사이에는 GC를 해주는 편이 메모리 관리에 더 편할것
     public string Ch_names = "A";//캐릭터명
-    //게임 시작시 기본 마나가 있어야함 2 정도 
+                                 //게임 시작시 기본 마나가 있어야함 2 정도 
+    public int Ch_Flag = 0;//캐릭터  끼리 구분용 플래그
 
     public Stat_Get Lv;//레벨
     public Stat_Get AWK;//각성 단계
@@ -37,7 +38,7 @@ public class Ch
     //[강화 버프용]
     //강화는 직접적인 스탯 관련만 올려줌 Statget애들 
     public Buff[] Buffed = new Buff[10];// 버프 관리
-
+    public Buff[] DeBuffed = new Buff[10];// 디버프 관리
 
     //약점을 찔릴시 방어불가 상태 및 회피 확률 감소 
 
@@ -50,8 +51,11 @@ public class Ch
     //[행동 선택 후]
     public State End_State_Flag;//[상태 플래그]0 = 기본 상태 , 1 = 회피 , 2 = 방어 상태
     //[행동 선택]
-    public State State_Flag;//[상태 플래그]  0 = 아무것도 안한 상태, 1 = 공격  ,2= 행동 끝난 상태 ,3 = 아무것도 못하는 상태 , 4 = 파티 슬롯에 있는 상태 (살아있음) ,5 = 사망 상태(필드) ,6= 사망 상태(파티 슬롯)
-
+    public State State_Flag;
+    //[상태 플래그]  0 = 아무것도 안한 상태, 1 = 공격  ,2= 행동 끝난 상태 ,3 = 아무것도 못하는 상태 , 4 = 파티 슬롯에 있는 상태 (살아있음) ,5 = 사망 상태(필드) ,6= 사망 상태(파티 슬롯)
+    public State State_Flag_Field;
+    // 0은 필드에 있는거 1 은 슬롯 
+    
 
     public bool Dodge_Flag_Success = false;//회피 플래그
 
@@ -61,7 +65,11 @@ public class Ch
 
 
 
-    public Ch(int Lv , string ch_names,int HP_,int ATK , int Speed , int Reflect_nerve,int Melee ,int Ranger,int Phy,int Magic ,int EX_Types,int Defence,int Mana_cost_,int Mana_regeneration, int Mana_regeneration_max,int Mana_cost_max,int CH_AWK,int stat_Flag_END,int Stat_Flag)//생성자
+    public Ch(int Lv , string ch_names,int HP_,int ATK , int Speed ,
+    int Reflect_nerve,int Melee ,int Ranger,int Phy,int Magic ,
+    int EX_Types,int Defence,int Mana_cost_,int Mana_regeneration,
+    int Mana_regeneration_max,int Mana_cost_max,int CH_AWK,
+    int stat_Flag_END,int Stat_Flag)//생성자
     {
         this.Lv = new Stat_Get(999,Lv,"LV",1);
         Ch_names = ch_names;
@@ -78,10 +86,12 @@ public class Ch
         this.abnormal_status = new Type_Attribute(EX_Types, "Magic", Maxed_stats.Max_EX_Types, -Maxed_stats.Max_EX_Types);
         Mana_cost = new Stat_Get(Mana_cost_max, Mana_cost_, "Mana", 0);
         AWK =new(3,CH_AWK,"AWK",0);
-
+        End_State_Flag = new State();
+        State_Flag = new State();
+        State_Flag_Field = new State();
         End_State_Flag.Set_Stat(stat_Flag_END);
         State_Flag.Set_Stat(Stat_Flag);
-      
+        State_Flag_Field.Set_Stat(0);//강제로 필드에 있는 상태로
     }
 
 

@@ -10,7 +10,8 @@ public class Skills : MonoBehaviour
 public class mana_Gain : Skill_Type // 수급기 
 {
     //기본적인 판정 자체는 파티 캐릭터 편성시 만드는걸로 ㅇㅇ
-    public mana_Gain(float dmg_Persent, string skill_Type_name, string skill_Attribute,int skill_cost,string Skill_names) : base(dmg_Persent, skill_Type_name, skill_Attribute, Skill_names)
+    public mana_Gain(float dmg_Persent, string skill_Type_name, string skill_Attribute,int skill_cost,string Skill_names,float skill_Times) :
+    base(dmg_Persent, skill_Type_name, skill_Attribute, Skill_names, skill_Times)
     {
        cost_gain = skill_cost;
 
